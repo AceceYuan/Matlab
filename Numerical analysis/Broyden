@@ -1,0 +1,74 @@
+global c p
+c=c0;
+p=p0;
+
+sol([a1;b1;c1]);
+sol([a2;b2;c2]);
+sol([a3;b3;c3]);
+%set initial value
+%by changing different value we can get corresponding solution
+
+function sol(s0)
+%solve and plot according to initial value 
+s = broyden2(@F,s0);
+%multivariate solver Broyden II
+s = fsolve(@F,s0);
+% through amounts of trails we found that 
+% this solver have higer speed and accuracy than BroydenII
+% choose one of the solver above to run
+
+[~,y] = ode45(@intergration,[0,2*pi],[pi/2;s(1);0;0;s(2);0;s(3)]);
+%function ode45 initial value solver
+disp(s)
+% display the solution
+
+hold on
+axis equal
+
+plot(y(:,2),y(:,3))
+% plot corresponding graph
+
+end
+
+function d= intergration(~,y)
+global c p
+d= [-1-c*y(5)+(c+1)*y(7);
+(1+c*(y(5)-y(7)))*cos(y(1)); 
+(1+c*(y(5)-y(7)))*sin(y(1)); 
+1+c*(y(5)-y(7));
+(-y(6))*(-1-c*y(5)+(c+1)*y(7));
+y(7)*y(5)-(1+c*(y(5)-y(7)))*(y(5)+p);
+(1+c*(y(5)-y(7)))*y(6)];
+
+end
+
+function z=F(s)
+% error function
+
+[~,y]=ode45(@intergration,[0,pi/2],[pi/2;s(1);0;0;s(2);0;s(3)]);
+%ode45 to get the boundary value
+% compute the error
+z=y(end,[1,2,6])';
+
+end
+
+function x=broyden2(f,x0)
+% this function is develope according to the method given in book
+[n,~]=size(x0);
+b=eye(n,n);
+
+for i=1:1000
+    x=x0-b*f(x0);
+     del=x-x0;
+    delta=f(x)-f(x0);
+    b=b+(del-b*delta)*del'*b/(del'*b*delta);
+ if (norm(x-x0)<1e-10),return,end
+ % when error less than 1*10^(-10), retern x
+ x0=x;
+ 
+end
+x=[NaN;NaN;NaN];
+% if error donot satisfide the condition, return empty
+
+end
+
