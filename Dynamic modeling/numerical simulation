@@ -1,0 +1,45 @@
+
+a=0.1;
+b=2-a; %different value of a,b
+
+df=@(t,x)[x(1)*(1-x(1)-a*x(2)-b*x(3));
+          x(2)*(1-b*x(1)-x(2)-a*x(3));
+          x(3)*(1-a*x(1)-b*x(2)-x(3))]
+
+x0=[1;2;3]; %initial population density of species
+tf=25; %time span
+
+[t,x] =ode45(df,[0 tf],x0)
+
+plot(t,x)
+
+xlim([0.0 25.0])
+ylim([0.00 3.00])
+legend('N1','N2','N3')
+title('a=0.1')
+xlabel('t')
+ylabel('Ni')
+
+
+
+df=@(t,x)[4*x(1)*(x(1)+1)*(1-x(1)/4)-x(1)*x(2);-10*x(2)+x(1)*x(2)];
+
+x0=[1;1]; %initial population density of x and y
+tf=10; %time span
+
+[t,x] =ode45(df,[0 tf],x0)
+
+plot(t,x)
+
+legend('x','y')
+xlabel('t')
+ylabel('Population density')
+title('s=10')
+
+
+
+
+
+
+
+
