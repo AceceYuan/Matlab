@@ -1,0 +1,25 @@
+lambda = 4:2:20; mu = 4:2:20; c=6;
+[Lambda,Mu] = meshgrid(lambda,mu);
+for i = 1:length(Lambda)
+    for j = 1:length(Mu)
+        [~,SimuLQ(i,j),~] = QueLen(Lambda(i,j),Mu(i,j),c,100000,1,0);
+        rho = Lambda(i,j)/Mu(i,j);
+        ii = 0:c-1;
+        p0 = (sum(rho.^ii./factorial(ii))+rho^c/((c-rho)*factorial(c-1)))^-1;
+        TheoLQ(i,j) = p0*rho^(c+1)/((c-rho)^2*factorial((c-1)));
+    end
+end
+surf(Lambda,Mu,SimuLQ,'edgecolor','b')
+hold on
+surf(Lambda,Mu,TheoLQ,'edgecolor','r')
+hold off
+label([4,20,2,20,0,1e-2])
+axis([xmin,xmax,ymin,ymax]); 
+xlim([xmin,xmax]);
+ylim([ymin,ymax]);
+zlim([zmin,zmax]);
+legend('Simulated L_q','Theoretical L_q')
+xlabel('\lambda')
+ylabel('\mu')
+zlabel('L_q')
+title('Comparison on the simulated L_q and theoretical L_q when c=6')
