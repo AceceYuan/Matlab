@@ -1,0 +1,14 @@
+SimuLq = 0; SimuWq = 0; lambda = 20; mu = 12; c = 3; delta = 1;
+parfor i = 1:10000
+[wq,lq] = QueLen(lambda,mu,c,10000,delta,0);
+SimuLq = SimuLq+lq;
+SimuWq = SimuWq+wq;
+end
+SimuLq = SimuLq/10000
+SimuWq = SimuWq/10000
+rho = lambda/mu;
+i = 0:c-1;
+p0 = (sum(rho.^i./factorial(i))+rho^c/((c-rho)*factorial(c-1)))^-1;
+TheoLq = p0*rho^(c+1)/((c-rho)^2*factorial((c-1)))
+TheoWq = TheoLq/lambda
+[~,~] = QueLen(lambda,mu,c,400,delta,1);
