@@ -1,0 +1,31 @@
+#2.1
+SimuLq = 0; lambda = 20; mu = [12;6]; c = [3;5]; delta = 1;
+parfor i = 1:10000
+Lq = embque(lambda,mu,c,10000,delta,0)
+SimuLq = SimuLq+Lq;
+end
+SimuLq = SimuLq/10000
+embque(lambda,mu,c,300,delta,1)
+
+
+
+#2.2
+
+lambda1 = 20; mu = [12;6]; T = 100000; delta = 1; type = 0;
+min = inf;
+for i = 1:6
+    for j = 1:6
+        c = [i;j];
+        Lq = embque(lambda1,mu,c,T,delta,type);
+        cost = 100*(i+j)+1000*sum(Lq);
+        if cost < min
+            min = cost;
+            counter(1) = i;
+            counter(2) = j;
+        end
+    end
+end
+X = ['number of counters = ',num2str(counter)];
+disp(X)
+Y = ['the minimal cost = ',num2str(min)];
+disp(Y)
